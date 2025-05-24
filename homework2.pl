@@ -1,9 +1,9 @@
 
-#!/usr/bin/perl
+
 use strict;
 use warnings;
 
-# Πίνακας γενετικού κώδικα
+
 my %codon_table = (
     'ATA'=>'I', 'ATC'=>'I', 'ATT'=>'I', 'ATG'=>'M',
     'ACA'=>'T', 'ACC'=>'T', 'ACG'=>'T', 'ACT'=>'T',
@@ -22,19 +22,19 @@ my %codon_table = (
     'TAC'=>'Y', 'TAT'=>'Y', 'TAA'=>'_', 'TAG'=>'_', 'TGA'=>'_'
 );
 
-# Διαβάζει την αλληλουχία από το χρήστη ή αρχείο
+
 my $sequence = join("", <>);
 $sequence =~ s/\s+//g;
 $sequence = uc($sequence);
 
-# Υπολογισμός reverse complement
+
 sub reverse_complement {
     my ($seq) = @_;
     $seq =~ tr/ACGTacgt/TGCAtgca/;
     return reverse $seq;
 }
 
-# Εύρεση και μετάφραση ORFs
+
 sub find_orfs {
     my ($dna, $strand) = @_;
     my @orfs;
@@ -58,7 +58,6 @@ sub find_orfs {
     return @orfs;
 }
 
-# Μετάφραση DNA σε πρωτεΐνη
 sub translate {
     my ($seq) = @_;
     my $protein = "";
@@ -69,12 +68,10 @@ sub translate {
     return $protein;
 }
 
-# Εκτέλεση
 my @forward_orfs = find_orfs($sequence, 'forward');
 my $rev_comp = reverse_complement($sequence);
 my @reverse_orfs = find_orfs($rev_comp, 'reverse');
 
-# Εκτύπωση ORFs
 foreach my $orf (@forward_orfs, @reverse_orfs) {
     print "Strand: $orf->{strand}, Start: $orf->{start}, End: $orf->{end}\n";
     print "Protein: $orf->{protein}\n\n";
